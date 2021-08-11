@@ -27,7 +27,7 @@ pub fn main() -> Result<(), String> {
 
     let mut event_pump = sdl_context.event_pump()?;
 
-    let worm = Worm::new(WORM_INIT_X, WORM_INIT_Y, WORM_INIT_LENGTH);
+    let mut worm = Worm::new(WORM_INIT_X, WORM_INIT_Y, WORM_INIT_LENGTH);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -37,6 +37,18 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Escape),
                     ..
                 } => break 'running,
+                Event::KeyDown { keycode: Some(Keycode::Up), .. } => {
+                    worm.set_direction(worm::MoveDirection::UP);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Down), .. } => {
+                    worm.set_direction(worm::MoveDirection::DOWN);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Right), .. } => {
+                    worm.set_direction(worm::MoveDirection::RIGHT);
+                },
+                Event::KeyDown { keycode: Some(Keycode::Left), .. } => {
+                    worm.set_direction(worm::MoveDirection::LEFT);
+                },
                 _ => {}
             }
         }
