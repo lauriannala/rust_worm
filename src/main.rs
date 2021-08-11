@@ -1,12 +1,14 @@
 extern crate sdl2;
 
 mod config;
+mod worm;
 
-use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER};
+use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER, WORM_INIT_LENGTH, WORM_INIT_X, WORM_INIT_Y};
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use worm::Worm;
 use std::convert::TryInto;
 use std::time::Duration;
 
@@ -24,6 +26,8 @@ pub fn main() -> Result<(), String> {
     let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
 
     let mut event_pump = sdl_context.event_pump()?;
+
+    let worm = Worm::new(WORM_INIT_X, WORM_INIT_Y, WORM_INIT_LENGTH);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -45,14 +49,16 @@ pub fn main() -> Result<(), String> {
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         for x in 0..WIDTH {
             for y in 0..HEIGHT {
-                if x == 10 && y == 15 {
-                    let render = Rect::new(
-                        (x * WINDOW_MULTIPLIER).try_into().unwrap(),
-                        (y * WINDOW_MULTIPLIER).try_into().unwrap(),
-                        WINDOW_MULTIPLIER,
-                        WINDOW_MULTIPLIER);
-                    let _ = canvas.fill_rect(render);
+                if !worm.is_set(&x, &y) {
+                    continue;
                 }
+
+                let render = Rect::new(
+                    (x * WINDOW_MULTIPLIER).try_into().unwrap(),
+                    (y * WINDOW_MULTIPLIER).try_into().unwrap(),
+                    WINDOW_MULTIPLIER,
+                    WINDOW_MULTIPLIER);
+                let _ = canvas.fill_rect(render);
             }
         }
         canvas.present();
