@@ -74,6 +74,7 @@ pub fn main() -> Result<(), String> {
             }
         }
         canvas.present();
+        worm.move_next(WIDTH, HEIGHT);
     }
 
     Ok(())
