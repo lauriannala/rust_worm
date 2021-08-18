@@ -2,7 +2,9 @@ extern crate sdl2;
 
 mod config;
 mod worm;
+mod apple;
 
+use apple::Apple;
 use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER, WORM_INIT_LENGTH, WORM_INIT_X, WORM_INIT_Y};
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -28,6 +30,7 @@ pub fn main() -> Result<(), String> {
     let mut event_pump = sdl_context.event_pump()?;
 
     let mut worm = Worm::new(WORM_INIT_X, WORM_INIT_Y, WORM_INIT_LENGTH);
+    let mut apple = Apple::new(0, 0);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -61,7 +64,10 @@ pub fn main() -> Result<(), String> {
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         for x in 0..WIDTH {
             for y in 0..HEIGHT {
-                if !worm.is_set(&x, &y) {
+                if worm.is_set(&x, &y) && apple.is_set(x, y) {
+                    worm.grow();
+                }
+                if !worm.is_set(&x, &y) && !apple.is_set(x, y) {
                     continue;
                 }
 

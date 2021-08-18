@@ -42,6 +42,10 @@ impl Worm {
             .any(|(x, y)| x == requested_x && y == requested_y)
     }
 
+    pub fn grow(&mut self) {
+        self.should_grow = true;
+    }
+
     pub fn set_direction(&mut self, direction: MoveDirection) {
         if self.direction == MoveDirection::UP && direction == MoveDirection::DOWN {
             return;
