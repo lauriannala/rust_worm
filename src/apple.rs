@@ -11,6 +11,10 @@ impl Apple {
         }
     }
 
+    pub fn reset(&mut self, x: u32, y: u32) {
+        self.coordinates = (x, y);
+    }
+
     pub fn is_set(&self, x: u32, y: u32) -> bool {
         let (actual_x, actual_y) = self.coordinates;
         actual_x == x && actual_y == y

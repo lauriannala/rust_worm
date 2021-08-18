@@ -13,10 +13,12 @@ use sdl2::rect::Rect;
 use worm::Worm;
 use std::convert::TryInto;
 use std::time::Duration;
+use rand::Rng;
 
 pub fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
+    let mut rng = rand::thread_rng();
 
     let window = video_subsystem
         .window("rust_worm", WIDTH * WINDOW_MULTIPLIER, HEIGHT * WINDOW_MULTIPLIER)
@@ -66,6 +68,10 @@ pub fn main() -> Result<(), String> {
             for y in 0..HEIGHT {
                 if worm.is_set(&x, &y) && apple.is_set(x, y) {
                     worm.grow();
+                    apple.reset(
+                        rng.gen_range(0..(WIDTH - 1)),
+                        rng.gen_range(0..(HEIGHT - 1))
+                    );
                 }
                 if !worm.is_set(&x, &y) && !apple.is_set(x, y) {
                     continue;
