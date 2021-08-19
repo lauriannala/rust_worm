@@ -69,12 +69,15 @@ pub fn main() -> Result<(), String> {
                 if worm.is_set(&x, &y) && apple.is_set(x, y) {
                     worm.grow();
                     apple.reset(
-                        rng.gen_range(0..(WIDTH - 1)),
-                        rng.gen_range(0..(HEIGHT - 1))
+                        rng.gen_range(0..WIDTH),
+                        rng.gen_range(0..HEIGHT)
                     );
                 }
                 if !worm.is_set(&x, &y) && !apple.is_set(x, y) {
                     continue;
+                }
+                if worm.has_collisions(&x, &y) {
+                    worm = Worm::new(WORM_INIT_X, WORM_INIT_Y, WORM_INIT_LENGTH);
                 }
 
                 let render = Rect::new(

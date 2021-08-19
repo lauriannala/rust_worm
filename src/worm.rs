@@ -144,4 +144,9 @@ impl Worm {
             self.should_grow = false;
         }
     }
+
+    pub fn has_collisions(&self, requested_x: &u32, requested_y: &u32) -> bool {
+        let matches = self.coordinates.iter().filter(|(x, y)| x == requested_x && y == requested_y);
+        matches.count() > 1
+    }
 }
